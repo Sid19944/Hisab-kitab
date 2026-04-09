@@ -6,7 +6,6 @@ import { sendVerificationEmail } from "@/utils/sendVerificationMail";
 import { wrapAsync } from "@/utils/wrapAsync";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
-import z, { success } from "zod";
 
 function FirstLetterUpperCase(str: string) {
   return str.at(0)?.toUpperCase() + str.substring(1);
