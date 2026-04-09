@@ -1,7 +1,7 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
-import TeamLeaderModel from "@/models/teamLeader";
+import TeamLeaderModel from "@/models/user";
 import dbConnect from "@/lib/dbConnect";
 import { ObjectId } from "mongoose";
 
@@ -45,12 +45,14 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       if (user) {
         token._id = user._id;
+        token.isVerified = user.isVerified;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user._id = token._id as ObjectId;
+        session.user.isVerified = token.isVerified as boolean;
       }
       return session;
     },

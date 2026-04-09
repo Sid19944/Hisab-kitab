@@ -7,7 +7,7 @@ export async function sendVerificationEmail(
 ): Promise<ApiResponse> {
   try {
     const repo = await fetch("https://api.brevo.com/v3/smtp/email", {
-      method: "",
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
         "api-key": process.env.BREVO_API_KEY!,
