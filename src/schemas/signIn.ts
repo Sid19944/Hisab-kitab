@@ -1,8 +1,6 @@
-import { email, z } from "zod";
+import z from "zod";
 
-export const signUpSchema = z.object({
-  firstName: z.string(),
-  lastName : z.string(),
+export const signInSchema = z.object({
   email: z.string().email({ message: "Invalid Email ID" }),
   password: z
     .string()
@@ -11,8 +9,4 @@ export const signUpSchema = z.object({
     .regex(/[A-Z]/, "Must include uppercase")
     .regex(/\d/, "Must include number")
     .regex(/[^A-Za-z0-9]/, "Must include special character"),
-  confirmPassword: z
-    .string()
-    
 });
-

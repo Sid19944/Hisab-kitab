@@ -1,0 +1,216 @@
+"use client";
+
+import { signUpSchema } from "@/schemas/signUp";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import z from "zod";
+
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { Loader2 } from "lucide-react";
+import axios, { AxiosError } from "axios";
+
+import { toast } from "sonner";
+import { ApiResponse } from "@/types/ApiResponse";
+import { useRouter } from "next/navigation";
+
+function page() {
+  const router = useRouter()
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const form = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+    mode: "onChange",
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+  });
+
+  const { watch } = form;
+  const Pass = watch("password");
+  const confirmPass = watch("confirmPassword");
+
+  const onSubmit = async (data: z.infer<typeof signUpSchema>) => {
+    setIsSubmitting(true);
+    try {
+      const respo = await axios.post<ApiResponse>(`/api/sign-up`, data);
+      toast.success(respo.data.message);
+      router.replace(`/verify/${data.email}`)
+    } catch (error) {
+      const axiosErr = error as AxiosError<ApiResponse>;
+      toast.error(axiosErr.response?.data.message ?? "Error while Sign Up");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 spcae-y-8 bg-white rounded-lg shadow-md">
+        <div className="text-center">
+          <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
+            Join Hisab-Kitab
+          </h1>
+          <p className="mb-4">Sign Up to continue stress free calculation</p>
+        </div>
+
+        <div>
+          <form id="sign-in-form" onSubmit={form.handleSubmit(onSubmit)}>
+            <FieldGroup>
+              <div className="flex gap-2">
+                <Controller
+                  name="firstName"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="firstName">First Name</FieldLabel>
+                      <div className="flex gap-2">
+                        <Input
+                          {...field}
+                          id="firstName"
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Enter First Name"
+                          autoComplete="off"
+                        />
+                      </div>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+                <Controller
+                  name="lastName"
+                  control={form.control}
+                  render={({ field, fieldState }) => (
+                    <Field data-invalid={fieldState.invalid}>
+                      <FieldLabel htmlFor="lastName">Last Name</FieldLabel>
+                      <div className="flex gap-2">
+                        <Input
+                          {...field}
+                          id="lastName"
+                          aria-invalid={fieldState.invalid}
+                          placeholder="Enter Last Name"
+                          autoComplete="off"
+                        />
+                      </div>
+                      {fieldState.invalid && (
+                        <FieldError errors={[fieldState.error]} />
+                      )}
+                    </Field>
+                  )}
+                />
+              </div>
+              <Controller
+                name="email"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="email">Email</FieldLabel>
+                    <div className="flex gap-2">
+                      <Input
+                        {...field}
+                        id="email"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Enter Email ID"
+                        autoComplete="off"
+                      />
+                    </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="password"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="password">Password</FieldLabel>
+                    <div>
+                      <Input
+                        {...field}
+                        id="passwordemail"
+                        type="password"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Enter Password"
+                        autoComplete="off"
+                      />
+                    </div>
+                    {fieldState.invalid && (
+                      <FieldError errors={[fieldState.error]} />
+                    )}
+                  </Field>
+                )}
+              />
+              <Controller
+                name="confirmPassword"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="confirmPassword">
+                      Confirm Password
+                    </FieldLabel>
+                    <div>
+                      <Input
+                        {...field}
+                        id="confirmPassword"
+                        type="confirmPassword"
+                        aria-invalid={fieldState.invalid}
+                        placeholder="Enter Confirm Password"
+                        autoComplete="off"
+                      />
+                    </div>
+                    {confirmPass !== "" && Pass !== confirmPass && (
+                      <FieldError>Password dosn't match</FieldError>
+                    )}
+                  </Field>
+                )}
+              />
+
+              <Button
+                type="submit"
+                className="cursor-pointer"
+                disabled={isSubmitting}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="animate-spin" /> Please wait
+                  </>
+                ) : (
+                  <>Sign Up</>
+                )}
+              </Button>
+            </FieldGroup>
+          </form>
+          <div>
+            <p>
+              Already a member?{" "}
+              <Link
+                href={`/sign-in`}
+                className="text-blue-400 hover:text-blue-600 hover:underline"
+              >
+                Sign In
+              </Link>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default page;

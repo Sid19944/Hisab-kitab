@@ -15,9 +15,13 @@ export const POST = wrapAsync(async (req: NextRequest) => {
   await dbConnect();
 
   const body = await req.json();
-  const { firstName, lastName, email, password } = body;
+  const { firstName, lastName, email, password, confirmPassword } = body;
 
-  if (!firstName || !lastName || !email || !password) {
+  if (password !== confirmPassword) {
+    throw new ErrorHandler("Password dosn't match", 400);
+  }
+
+  if (!firstName || !lastName || !email || !password || !confirmPassword) {
     throw new ErrorHandler("Please Provide All Details", 400);
   }
 
@@ -25,22 +29,29 @@ export const POST = wrapAsync(async (req: NextRequest) => {
     FirstLetterUpperCase(firstName) + " " + FirstLetterUpperCase(lastName);
 
   // Zod validation
-  const checkSignUpSchema = signUpSchema.safeParse({ name, email, password });
+  const checkSignUpSchema = signUpSchema.safeParse({
+    firstName,
+    lastName,
+    email,
+    password,
+    confirmPassword,
+  });
   if (!checkSignUpSchema.success) {
     const formatted = checkSignUpSchema.error.format();
-    const nameErr = formatted.name?._errors?.[0];
+    const fNameErr = formatted.firstName?._errors?.[0];
+    const lNameErr = formatted.lastName?._errors?.[0];
     const emailErr = formatted.email?._errors?.[0];
     const passwordErr = formatted.password?._errors?.[0];
 
     throw new ErrorHandler(
-      `${nameErr ?? emailErr ?? passwordErr ?? "Invalid Input"}`,
+      `${fNameErr ?? lNameErr ?? emailErr ?? passwordErr ?? "Invalid Input"}`,
       400,
     );
   }
 
   const userExist = await UserModel.findOne({ email });
 
-  const verifyCode = Math.floor(100000 + Math.random() * 999999);
+  const verifyCode = Math.floor(100000 + Math.random() * 900000);
   const hashPass = await bcrypt.hash(password, 10);
   const verifyCodeExpiry = new Date(Date.now() + 5 * 60 * 1000);
   if (userExist) {
