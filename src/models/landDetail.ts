@@ -1,17 +1,12 @@
-import mongoose, { Schema, Document } from "mongoose";
-
-enum status {
-  pending = "pending",
-  in_progress = "in_progress",
-  completed = "completed",
-  canceled = "canceled",
-}
+import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 export interface LandDetail extends Document {
   owner: string;
   area: number;
   money: number;
-  status: status;
+  location: string;
+  status: string;
+  landAssignTo: ObjectId;
 }
 
 const LandDetailSchema: Schema<LandDetail> = new Schema(
@@ -20,11 +15,18 @@ const LandDetailSchema: Schema<LandDetail> = new Schema(
       type: String,
       required: true,
     },
+    location: { type: String, required: true },
     area: { type: Number, required: true },
     money: { type: Number, required: true },
     status: {
       type: String,
-      enum: Object.values(status),
+      enum: ["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELED"],
+      required: true,
+    },
+    landAssignTo: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: [true, "Pleaer Provide Land Assigner"],
     },
   },
   { timestamps: true },

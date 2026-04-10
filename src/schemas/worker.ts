@@ -8,7 +8,6 @@ export const numberSchema = z
   .regex(/^[6-9]\d{9}$/, "Enter a valid Indian mobile number");
 
 export const workerSchema = z.object({
-  teamLeader: z.string(),
   name: z.string(),
   mobileNumber: numberSchema,
 });

@@ -3,32 +3,37 @@ import WorkerModle from "@/models/worker";
 import { nameSchema, numberSchema, workerSchema } from "@/schemas/worker";
 import ErrorHandler from "@/utils/errorHandler";
 import { wrapAsync } from "@/utils/wrapAsync";
+import { getServerSession, User } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import z, { number } from "zod";
+import { authOptions } from "../../auth/[...nextauth]/options";
 
 export const PUT = wrapAsync(async (req: NextRequest) => {
   await dbConnect();
 
+  const session = await getServerSession(authOptions);
+  const user: User = session?.user as User;
+
+  if (!session || !session.user) {
+    throw new ErrorHandler("Not Authenticated", 400);
+  }
+
   const body = await req.json();
   const { id } = body;
   const newData = {
-    teamLeader: body.teamLeader as string,
     name: body?.name as string,
     mobileNumber: body?.mobileNumber,
   };
 
-  if (!id || !newData.teamLeader) {
-    throw new ErrorHandler(
-      `${id ? "Provide TeamLeader ID" : "Provide ID"}`,
-      400,
-    );
+  if (!id) {
+    throw new ErrorHandler(`"Provide ID"`, 400);
   }
 
   // Zod validation — only validate fields that exist
   const checkWorkerSchema =
     newData.name && newData.mobileNumber
       ? workerSchema.safeParse({
-          teamLeader: newData.teamLeader,
+          teamLeader: user._id,
           name: newData.name,
           mobileNumber: String(newData.mobileNumber),
         })
@@ -55,7 +60,7 @@ export const PUT = wrapAsync(async (req: NextRequest) => {
     mobileNumber: body.mobileNumber && Number(body?.mobileNumber),
   });
 
-  if (worker?.teamLeader.toString() !== newData.teamLeader) {
+  if (worker?.teamLeader.toString() !== user._id) {
     throw new ErrorHandler("This Worker is not under you", 400);
   }
 
