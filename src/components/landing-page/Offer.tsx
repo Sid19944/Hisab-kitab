@@ -4,7 +4,7 @@ import { easeInOut, motion } from "framer-motion";
 
 function Offer() {
   return (
-    <div className="bg-[#f5edd6] p-10 py-18 flex flex-col gap-4">
+    <div id="features" className="bg-[#f5edd6] p-10 py-18 flex flex-col gap-4">
       <h1 className="text-green-700 tracking-[1px] font-semibold font-mono">
         WHAT WE OFFER
       </h1>

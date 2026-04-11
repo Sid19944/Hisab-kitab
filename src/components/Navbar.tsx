@@ -16,7 +16,7 @@ function Navbar() {
   const pathname = usePathname();
 
   return (
-    <div className="sticky top-0 bg-[rgb(44,24,16)] text-[rgb(226,163,138)]">
+    <div className="sticky top-0 bg-[rgb(44,24,16)] text-[rgb(226,163,138)] z-10">
       {/* desktop view */}
       <nav className="border-b border-[rgb(159,65,28)] p-2 justify-around items-center shadow-md hidden md:flex">
         <h1 className="text-2xl font-bold tracking-[2px] text-[rgb(255,183,0)]">
@@ -31,15 +31,15 @@ function Navbar() {
           </Link>
           <Link
             className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
-            href="/about"
+            href="#features"
           >
-            About
+            Features
           </Link>
           <Link
             className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
-            href="/features"
+            href="#howItWork"
           >
-            Features
+            How it work
           </Link>
           <Link
             className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
@@ -58,7 +58,7 @@ function Navbar() {
       </nav>
 
       {/* mobile view */}
-      <nav className="flex justify-around py-2 items-center md:hidden ">
+      <nav className="flex justify-around py-2 items-center md:hidden">
         <h1 className="text-2xl font-bold tracking-[2px] text-[rgb(232,201,122)]">
           Hisab Kitab
         </h1>
@@ -77,7 +77,7 @@ function Navbar() {
               whileInView={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -100 }}
               transition={{ duration: 0.6 }}
-              className={`absolute top-12 flex gap-2 flex-col w-full bg-[rgb(44,24,16)] rounded-b-lg`}
+              className={`absolute top-12 flex gap-2 flex-col w-full bg-[rgb(44,24,16)] rounded-b-lg z-1`}
             >
               <Link
                 className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
@@ -87,15 +87,15 @@ function Navbar() {
               </Link>
               <Link
                 className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
-                href="/about"
+                href="#features"
               >
-                About
+                Features
               </Link>
               <Link
                 className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
-                href="/features"
+                href="#howItWork"
               >
-                Features
+                How it work
               </Link>
               <Link
                 className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"

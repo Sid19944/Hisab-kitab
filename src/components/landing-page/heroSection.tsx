@@ -26,7 +26,7 @@ function HeroSection() {
                 <em className="text-amber-300">workers & earnings</em>
                 <br />— all in one place.
               </h1>
-              <p className="text-start text-[#c7b07a] tracking-tight text-md md:text-lg font-normal mt-6">
+              <p className="text-center sm:text-start text-[#c7b07a] tracking-tight text-md md:text-lg font-normal mt-6">
                 Add and manage workers with their details, daily wage, and
                 assigned land. Keep everything organized in one place.
               </p>
