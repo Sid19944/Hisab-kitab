@@ -53,11 +53,19 @@ function page() {
     router.replace("/dashboard");
   };
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 spcae-y-8 bg-white rounded-lg shadow-md">
+    <div
+      className="flex flex-col justify-center items-center min-h-screen bg-[rgb(68,35,22)]"
+      style={{
+        backgroundImage: `
+      linear-gradient(rgba(70, 73, 81, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(70, 73, 81, 0.5) 1px, transparent 1px)`,
+        backgroundSize: "40px 40px",
+      }}
+    >
+      <div className="w-[95%] max-w-md p-8 spcae-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Join Hisab-Kitab
+            Join <span className="text-[rgb(236,185,55)]">Hisab</span>-<span className="text-[rgb(187,135,3)]">Kitab</span>
           </h1>
           <p className="mb-4">Sign In to continue stress free calculation</p>
         </div>

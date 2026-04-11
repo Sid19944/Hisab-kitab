@@ -48,11 +48,16 @@ function page() {
   };
 
   return (
-    <div className="h-screen bg-gray-200 justify-center items-center flex">
+    <div className="h-screen bg-[rgb(68,35,22)] justify-center items-center flex"
+    style={{
+      backgroundImage : `linear-gradient(rgba(70, 73, 81, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(70, 73, 81, 0.5) 1px, transparent 1px)`,
+      backgroundSize : "40px 40px"
+    }}>
       <div className="bg-white w-[95%] sm:w-fit shadow-md rounded-lg p-2 md:p-10 flex flex-col items-center gap-3 ">
         <div>
           <h1 className="text-3xl sm:text-5xl font-semibold tracking-[1px] text-center">
-            Join Hisab Kitab
+            Join <span className="text-[rgb(236,185,55)]">Hisab</span>-<span className="text-[rgb(187,135,3)]">Kitab</span>
           </h1>
           <h1 className="tracking-tight text-center text-sm sm:text-md">
             Enter Verificationi Code To Verify Your Account

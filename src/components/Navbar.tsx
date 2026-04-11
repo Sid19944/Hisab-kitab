@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Menu, X } from "lucide-react";
+import { LogOut, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { User } from "next-auth";
 import { usePathname } from "next/navigation";
 
@@ -17,47 +17,57 @@ function Navbar() {
 
   return (
     <div className="sticky top-0 bg-[rgb(44,24,16)] text-[rgb(226,163,138)] z-10">
-      {/* desktop view */}
+      {/* desktop view for landing page*/}
       <nav className="border-b border-[rgb(159,65,28)] p-2 justify-around items-center shadow-md hidden md:flex">
-        <h1 className="text-2xl font-bold tracking-[2px] text-[rgb(255,183,0)]">
-          Hisab Kitab
+        <h1 className="text-2xl font-bold tracking-[2px] text-[rgb(237,207,132)]">
+          Hisab <span className="text-[rgb(240,175,8)]">Kitab</span>
         </h1>
         <div className="flex gap-5 text-xl">
           <Link
             className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
-            href="/"
+            href={pathname === "/" ? "/" : "/dashboard"}
           >
-            Home
+            {pathname === "/" ? "Home" : "Overview"}
           </Link>
           <Link
             className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
-            href="#features"
+            href={pathname === "/" ? "#features" : "/add-worker"}
           >
-            Features
+            {pathname === "/" ? "Features" : "Add Worker"}
           </Link>
           <Link
             className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
-            href="#howItWork"
+            href={pathname === "/" ? "#howItWork" : "/attendance"}
           >
-            How it work
+            {pathname === "/" ? "How it work" : "Attendance"}
           </Link>
           <Link
             className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
-            href="/contact"
+            href={pathname === "/" ? "#footer" : "/land-detail"}
           >
-            Contact
+            {pathname === "/" ? "Contact" : "Land Detail"}
           </Link>
+          {pathname !== "/" && (
+            <Link
+              className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
+              href="/salary"
+            >
+              Salary
+            </Link>
+          )}
         </div>
-        {pathname === "/" && (
+        {pathname === "/" ? (
           <Link href="/sign-up">
             <Button className="text-xl p-5 cursor-pointer bg-[rgb(212,160,23)] text-[rgb(86,63,7)]">
-              Sign Up
+              {!user?.isVerified ? "Sign Up" :"Dashboard" }
             </Button>
           </Link>
+        ) : (
+          "Avatar"
         )}
       </nav>
 
-      {/* mobile view */}
+      {/* mobile view for landing page*/}
       <nav className="flex justify-around py-2 items-center md:hidden">
         <h1 className="text-2xl font-bold tracking-[2px] text-[rgb(232,201,122)]">
           Hisab Kitab
@@ -81,28 +91,62 @@ function Navbar() {
             >
               <Link
                 className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
-                href="/"
+                href={pathname === "/" ? "/" : "/dashboard"}
               >
-                Home
+                {pathname === "/" ? "Home" : "Overview"}
               </Link>
               <Link
                 className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
-                href="#features"
+                href={pathname === "/" ? "#features" : "/add-worker"}
               >
-                Features
+                {pathname === "/" ? "Features" : "Add Worker"}
               </Link>
               <Link
                 className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
-                href="#howItWork"
+                href={pathname === "/" ? "#howItWork" : "/attendance"}
               >
-                How it work
+                {pathname === "/" ? "How it work" : "Attendance"}
               </Link>
               <Link
                 className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
-                href="/contact"
+                href={pathname === "/" ? "#footer" : "/land-detail"}
               >
-                Contact
+                {pathname === "/" ? "Contact" : "Land Detail"}
               </Link>
+              {pathname !== "/" && (
+                <Link
+                  className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
+                  href="/salary"
+                >
+                  Salary
+                </Link>
+              )}
+              {pathname === "/" ? (
+                <Link
+                  href="/sign-up"
+                  className="flex items-center justify-center "
+                >
+                  <Button className="text-lg mb-3 cursor-pointer bg-[rgb(212,160,23)] text-[rgb(86,63,7)] w-[90%]">
+                    {!user?.isVerified ? "Sign Up" :"Dashboard" }
+                  </Button>
+                </Link>
+              ) : (
+                <div className="flex justify-between border-b border-[rgb(135,78,56)] mb-2 rounded-lg">
+                  <Link
+                    className=" px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md w-full"
+                    href="/user"
+                  >
+                    User
+                  </Link>
+
+                  <Button
+                    onClick={() => signOut()}
+                    className="bg-amber-500 w-30 mr-5"
+                  >
+                    Sign Out <LogOut />
+                  </Button>
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

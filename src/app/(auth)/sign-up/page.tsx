@@ -23,7 +23,7 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { useRouter } from "next/navigation";
 
 function page() {
-  const router = useRouter()
+  const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const form = useForm<z.infer<typeof signUpSchema>>({
@@ -47,7 +47,7 @@ function page() {
     try {
       const respo = await axios.post<ApiResponse>(`/api/sign-up`, data);
       toast.success(respo.data.message);
-      router.replace(`/verify/${data.email}`)
+      router.replace(`/verify/${data.email}`);
     } catch (error) {
       const axiosErr = error as AxiosError<ApiResponse>;
       toast.error(axiosErr.response?.data.message ?? "Error while Sign Up");
@@ -57,11 +57,20 @@ function page() {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 spcae-y-8 bg-white rounded-lg shadow-md">
+    <div
+      className="flex flex-col justify-center items-center min-h-screen bg-[rgb(68,35,22)]"
+      style={{
+        backgroundImage: `
+      linear-gradient(rgba(70, 73, 81, 0.5) 1px, transparent 1px),
+      linear-gradient(90deg,rgba(70, 73, 81, 0.5) 1px, transparent 1px)`,
+        backgroundSize: `40px 40px`,
+      }}
+    >
+      <div className="w-[95%] max-w-md p-8 spcae-y-8 bg-white rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
-            Join Hisab-Kitab
+            Join <span className="text-[rgb(236,185,55)]">Hisab</span>-
+            <span className="text-[rgb(187,135,3)]">Kitab</span>
           </h1>
           <p className="mb-4">Sign Up to continue stress free calculation</p>
         </div>

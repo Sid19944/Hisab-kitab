@@ -1,5 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 function HeroSection() {
   return (
@@ -15,7 +16,7 @@ function HeroSection() {
     >
       <div className="flex justify-center lg:justify-between py-10 flex-col lg:flex-row gap-5">
         <div className="flex gap-6 flex-col max-w-150 lg:max-w-100">
-          <div className="border text-xs text-amber-400 border-amber-500 w-fit px-4 rounded-lg">
+          <div className="border text-sm text-amber-400 border-amber-500 w-fit px-4 rounded-lg py-1 bg-[#5b3a1a]">
             🌾 Built for ground-level operations
           </div>
           <div className="flex flex-col">
@@ -36,51 +37,54 @@ function HeroSection() {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                whileTap={{y : 5}}
-                whileHover={{y: -5}}
+                whileTap={{ y: 5 }}
+                whileHover={{ y: -5 }}
                 transition={{ duration: 0.3, ease: "easeIn" }}
                 className="text-2xl px-1 cursor-pointer bg-[#f1b62b] w-48 text-center rounded-lg"
               >
-                Let's Start
+                <Link href="/sign-up">Let's Start</Link>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                whileTap={{y : 5}}
-                whileHover={{y: -5}}
+                whileTap={{ y: 5 }}
+                whileHover={{ y: -5 }}
                 transition={{ duration: 0.3, ease: "easeIn" }}
                 className="text-2xl px-1 cursor-pointer hover:border-amber-400 text-gray-200 border w-48 text-center rounded-lg"
               >
-                See how it works
+                <Link href="#howItWork">See how it works</Link>
               </motion.div>
             </div>
           </div>
         </div>
         <div className="flex gap-2 flex-wrap lg:justify-end lg:flex-col">
-          <motion.div 
-          initial={{opacity : 0, x: 40}}
-          whileInView={{opacity : 1, x : 0}}
-          whileHover={{y : -5}}
-          transition={{duration : 0.4, ease : "easeInOut"}}
-           className="border bg-[rgba(245,245,244,0.1)]  border-[#7b5c12] hover:border-[#f1b62b] h-fit p-2 w-40 rounded-lg ">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="border bg-[rgba(245,245,244,0.1)]  border-[#7b5c12] hover:border-[#f1b62b] h-fit p-2 w-40 rounded-lg "
+          >
             <span className="text-3xl font-bolder text-[#f1b62b]">∞</span>
             <h1 className="text-[#b5a785]">Workers managed</h1>
           </motion.div>
-          <motion.div 
-          initial={{opacity : 0, x: 40}}
-          whileInView={{opacity : 1, x : 0}}
-          whileHover={{y : -5}}
-          transition={{duration : 0.4, ease : "easeInOut"}}
-           className="border bg-[rgba(245,245,244,0.1)]  border-[#7b5c12] hover:border-[#f1b62b] h-fit p-2 w-40 rounded-lg ">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="border bg-[rgba(245,245,244,0.1)]  border-[#7b5c12] hover:border-[#f1b62b] h-fit p-2 w-40 rounded-lg "
+          >
             <span className="text-3xl font-semibold text-[#f1b62b]">0</span>
             <h1 className="text-[#b5a785]">Paperwork needed</h1>
           </motion.div>
-          <motion.div 
-          initial={{opacity : 0, x: 40}}
-          whileInView={{opacity : 1, x : 0}}
-          whileHover={{y : -5}}
-          transition={{duration : 0.4, ease : "easeInOut"}}
-           className="border bg-[rgba(245,245,244,0.1)]  border-[#7b5c12] hover:border-[#f1b62b] h-fit p-2 w-40 rounded-lg ">
+          <motion.div
+            initial={{ opacity: 0, x: 40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            whileHover={{ y: -5 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className="border bg-[rgba(245,245,244,0.1)]  border-[#7b5c12] hover:border-[#f1b62b] h-fit p-2 w-40 rounded-lg "
+          >
             <h1 className="text-3xl font-semibold text-[#f1b62b]">
               <span className="text-lg">1</span>-click
             </h1>
