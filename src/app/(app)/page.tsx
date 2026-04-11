@@ -1,16 +1,19 @@
-'use client'
+"use client";
 
-import HeroSection from "@/components/landing-page/heroSection"
+import HeroSection from "@/components/landing-page/HeroSection";
+import Offer from "@/components/landing-page/Offer";
+
+
+
+
 
 function home() {
   return (
     <div className="flex-1">
-    <HeroSection/>
-    <div className="h-200 bg-amber-200">sdf</div>
-    <div className="h-200 bg-amber-500">sdf</div>
-    <div className="h-200 bg-amber-900">sdf</div>
+      <HeroSection />
+      <Offer/>
     </div>
-  )
+  );
 }
 
-export default home
+export default home;

@@ -18,31 +18,31 @@ function Navbar() {
   return (
     <div className="sticky top-0 bg-[rgb(44,24,16)] text-[rgb(226,163,138)]">
       {/* desktop view */}
-      <nav className="border p-2 justify-around items-center shadow-md hidden md:flex">
-        <h1 className="text-2xl font-bold tracking-[2px] text-[rgb(239,204,115)]">
+      <nav className="border-b border-[rgb(159,65,28)] p-2 justify-around items-center shadow-md hidden md:flex">
+        <h1 className="text-2xl font-bold tracking-[2px] text-[rgb(255,183,0)]">
           Hisab Kitab
         </h1>
         <div className="flex gap-5 text-xl">
           <Link
-            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)]"
+            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
             href="/"
           >
             Home
           </Link>
           <Link
-            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)]"
+            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
             href="/about"
           >
             About
           </Link>
           <Link
-            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)]"
+            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
             href="/features"
           >
             Features
           </Link>
           <Link
-            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)]"
+            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
             href="/contact"
           >
             Contact

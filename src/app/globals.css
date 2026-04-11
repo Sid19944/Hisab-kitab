@@ -128,3 +128,14 @@
     @apply font-sans;
   }
 }
+
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image:
+    linear-gradient(var(--wheat) 1px, transparent 1px),   /* horizontal lines */
+    linear-gradient(90deg, var(--wheat) 1px, transparent 1px); /* vertical lines */
+  background-size: 40px 40px; /* box size */
+}
