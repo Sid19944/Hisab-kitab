@@ -62,7 +62,7 @@ function page() {
         backgroundSize: "40px 40px",
       }}
     >
-      <div className="w-[95%] max-w-md p-8 spcae-y-8 bg-white rounded-lg shadow-md">
+      <div className="w-[95%] max-w-md p-8 spcae-y-8 bg-[#F5EDD6] rounded-lg shadow-md">
         <div className="text-center">
           <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl mb-6">
             Join <span className="text-[rgb(236,185,55)]">Hisab</span>-<span className="text-[rgb(187,135,3)]">Kitab</span>

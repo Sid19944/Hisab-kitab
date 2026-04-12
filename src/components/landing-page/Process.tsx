@@ -16,7 +16,7 @@ function Process() {
 
       <div className="rounded-lg grid lg:grid-cols-4 sm:grid-cols-2 gap-6 mt-10">
         <motion.div
-          initial={{ y: 40, opacity: 0 }}
+          initial={{ y: 80, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3, ease: easeInOut }}
@@ -35,7 +35,7 @@ function Process() {
           </div>
         </motion.div>
         <motion.div
-          initial={{ y: 40, opacity: 0 }}
+          initial={{ y: 80, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3, ease: easeInOut }}
@@ -54,7 +54,7 @@ function Process() {
           </div>
         </motion.div>
         <motion.div
-          initial={{ y: 40, opacity: 0 }}
+          initial={{ y: 80, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3, ease: easeInOut }}
@@ -73,7 +73,7 @@ function Process() {
           </div>
         </motion.div>
         <motion.div
-          initial={{ y: 40, opacity: 0 }}
+          initial={{ y: 80, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           whileHover={{ y: -5 }}
           transition={{ duration: 0.3, ease: easeInOut }}

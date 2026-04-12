@@ -24,32 +24,32 @@ function Navbar() {
         </h1>
         <div className="flex gap-5 text-xl">
           <Link
-            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
+            className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/dashboard" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
             href={pathname === "/" ? "/" : "/dashboard"}
           >
             {pathname === "/" ? "Home" : "Overview"}
           </Link>
           <Link
-            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
+            className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/add-worker" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
             href={pathname === "/" ? "#features" : "/add-worker"}
           >
             {pathname === "/" ? "Features" : "Add Worker"}
           </Link>
           <Link
-            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
+            className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/attendance" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
             href={pathname === "/" ? "#howItWork" : "/attendance"}
           >
             {pathname === "/" ? "How it work" : "Attendance"}
           </Link>
           <Link
-            className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
+            className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/land-detail" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
             href={pathname === "/" ? "#footer" : "/land-detail"}
           >
             {pathname === "/" ? "Contact" : "Land Detail"}
           </Link>
           {pathname !== "/" && (
             <Link
-              className=" px-3 py-1 rounded-lg hover:bg-[rgb(135,78,56)] hover:text-[rgb(54,26,14)]"
+              className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/salary" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
               href="/salary"
             >
               Salary
@@ -88,34 +88,35 @@ function Navbar() {
               exit={{ opacity: 0, y: -100 }}
               transition={{ duration: 0.6 }}
               className={`absolute top-12 flex gap-2 flex-col w-full bg-[rgb(44,24,16)] rounded-b-lg z-1`}
+              onClick={()=>setShowNav(false)}
             >
               <Link
-                className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
+                className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/dashboard" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
                 href={pathname === "/" ? "/" : "/dashboard"}
               >
                 {pathname === "/" ? "Home" : "Overview"}
               </Link>
               <Link
-                className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
+                className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/add-worker" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
                 href={pathname === "/" ? "#features" : "/add-worker"}
               >
                 {pathname === "/" ? "Features" : "Add Worker"}
               </Link>
               <Link
-                className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
+                className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/attendance" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
                 href={pathname === "/" ? "#howItWork" : "/attendance"}
               >
                 {pathname === "/" ? "How it work" : "Attendance"}
               </Link>
               <Link
-                className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
+                className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/land-detail" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
                 href={pathname === "/" ? "#footer" : "/land-detail"}
               >
                 {pathname === "/" ? "Contact" : "Land Detail"}
               </Link>
               {pathname !== "/" && (
                 <Link
-                  className="border-b border-[rgb(135,78,56)] px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md"
+                  className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/salary" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
                   href="/salary"
                 >
                   Salary
@@ -131,9 +132,9 @@ function Navbar() {
                   </Button>
                 </Link>
               ) : (
-                <div className="flex justify-between border-b border-[rgb(135,78,56)] mb-2 rounded-lg">
+                <div className="flex justify-between border-b border-[#FFFFFF] mb-2 rounded-lg">
                   <Link
-                    className=" px-3 py-1 hover:bg-[rgb(135,78,56)] rounded-lg shadow-md w-full"
+                    className=" px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md w-full"
                     href="/user"
                   >
                     User
