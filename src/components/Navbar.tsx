@@ -30,10 +30,10 @@ function Navbar() {
             {pathname === "/" ? "Home" : "Overview"}
           </Link>
           <Link
-            className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/add-worker" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
-            href={pathname === "/" ? "#features" : "/add-worker"}
+            className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/workers" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
+            href={pathname === "/" ? "#features" : "/workers"}
           >
-            {pathname === "/" ? "Features" : "Add Worker"}
+            {pathname === "/" ? "Features" : "Workers"}
           </Link>
           <Link
             className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/attendance" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
@@ -97,10 +97,10 @@ function Navbar() {
                 {pathname === "/" ? "Home" : "Overview"}
               </Link>
               <Link
-                className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/add-worker" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
-                href={pathname === "/" ? "#features" : "/add-worker"}
+                className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/workers" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
+                href={pathname === "/" ? "#features" : "/workers"}
               >
-                {pathname === "/" ? "Features" : "Add Worker"}
+                {pathname === "/" ? "Features" : "Workers"}
               </Link>
               <Link
                 className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/attendance" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
