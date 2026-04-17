@@ -10,20 +10,10 @@ import { Worker } from "@/models/worker";
 
 import {
   Field,
-  FieldDescription,
   FieldError,
   FieldGroup,
   FieldLabel,
 } from "@/components/ui/field";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
@@ -37,7 +27,7 @@ function page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [workers, setWorkers] = useState([]);
 
-  const { selectedJob } = useJob();
+  const { selectedJob, jobs } = useJob();
   const form = useForm<z.infer<typeof workerSchema>>({
     resolver: zodResolver(workerSchema),
     mode: "onSubmit",
@@ -47,11 +37,65 @@ function page() {
     },
   });
 
-  const onSubmit = async (data: z.infer<typeof workerSchema>) => {
+  const findWorkerThatInCurrJob =
+    jobs.filter((job) => job._id === selectedJob)[0]?.workers ?? [];
+
+  // add Worker
+  const handleAddWorker = async (data: z.infer<typeof workerSchema>) => {
     setIsSubmitting(true);
     setAddWorker(!addWorker);
 
-    console.log(data);
+    try {
+      const result = await axios.post(`/api/worker/add`, data);
+      toast.success(result.data.message);
+    } catch (err) {
+      const axiosErr = err as AxiosError<ApiResponse>;
+      toast.error(axiosErr.response?.data.message ?? "Failed to Add Worker");
+    }
+    {
+      form.reset();
+      setIsSubmitting(false);
+    }
+  };
+
+  // delete worker
+  const handleDeleteWorker = async (workerId: string) => {
+    console.log(typeof workerId);
+    setIsSubmitting(true);
+    try {
+      const result = await axios.delete(`/api/worker/delete/${workerId}`);
+      toast.success(result.data.message);
+    } catch (err) {
+      const axiosErr = err as AxiosError<ApiResponse>;
+      toast.error(axiosErr.response?.data.message ?? "Failed to delete Worker");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // add worker to job
+  const handleAddToJob = async (workerId: string) => {
+    setIsSubmitting(true);
+    try {
+      const result = await axios.put(`/api/job/add-worker`, {
+        id: selectedJob,
+        worker: workerId,
+      });
+
+
+      const addToAttendace = await axios.post(`/api/attendance/add-or-update`, {
+        job: selectedJob,
+        worker: workerId,
+      });
+
+      toast.success(result.data.message);
+    } catch (err) {
+      const axiosErr = err as AxiosError<ApiResponse>;
+      toast.error(
+        axiosErr.response?.data.message ??
+          "Failed to add Workers to Current Job",
+      );
+    }
   };
 
   useEffect(() => {
@@ -59,7 +103,6 @@ function page() {
       try {
         const result = await axios.get(`/api/worker/get-all-worker`);
         setWorkers(result.data.workers);
-        console.log(result.data.workers);
       } catch (err) {
         const axiosErr = err as AxiosError<ApiResponse>;
         toast.error(
@@ -67,11 +110,12 @@ function page() {
         );
       }
     })();
-  }, []);
+  }, [isSubmitting]);
+  
   return (
     <div
       id="addWorker"
-      className={`flex-1 flex flex-col`}
+      className={`flex-1 flex flex-col bg-[#FFFFFF]`}
       style={{
         backgroundImage: `linear-gradient(rgba(180, 145, 19, 0.2) 1px, transparent 1px),linear-gradient(90deg,rgba(180, 145, 19, 0.2) 1px, transparent 1px)`,
         backgroundSize: "40px 40px",
@@ -79,31 +123,49 @@ function page() {
     >
       <div className={`${addWorker && "opacity-[0.3]"}`}>
         <nav className="shadow-md bg-[#E2A364] flex justify-around font-mono tracking-tight items-center p-2">
-          <h1 className="text-3xl font-semibold ">All Workers</h1>
+          <h1 className="sm:text-3xl font-semibold ">All Workers</h1>
 
           <motion.div
             whileTap={{ y: 5 }}
             onClick={() => setAddWorker(!addWorker)}
-            className="border cursor-pointer rounded-lg bg-[#2C1810] text-[#FFFFFF] text-2xl p-3"
+            className="border cursor-pointer rounded-lg bg-[#2C1810] text-[#FFFFFF]  sm:text-2xl sm:p-3 px-1"
           >
             Add New Worker
           </motion.div>
         </nav>
 
-        <div className="flex flex-wrap gap-4 p-2">
+        <div className="flex flex-wrap justify-center p-1 gap-2">
           {workers.map((worker: Worker, idx) => (
             <div
               key={idx}
-              className="border w-fit px-6 py-3 rounded-lg bg-[#2C1810] text-[#E2A364]"
+              className="relative border w-fit px-6 py-3 rounded-lg bg-[#2C1810] text-[#E2A364]"
             >
-              <h1>{worker.name}</h1>
-              <h1>{worker.mobileNumber}</h1>
-              <motion.div
-                whileTap={{ y: 5 }}
-                className="border mt-2 cursor-pointer rounded-lg bg-[#2C1810] text-[#FFFFFF] px-2 tex-sm"
-              >
-                Add to Job
-              </motion.div>
+              <X
+                onClick={() => handleDeleteWorker(String(worker._id))}
+                className="absolute right-1 top-1 text-red-500 cursor-pointer"
+              />
+              <div className="mt-3">
+                <h1>{worker.name}</h1>
+                <h1>{worker.mobileNumber}</h1>
+              </div>
+
+              {findWorkerThatInCurrJob.some(
+                (w) =>
+                  w.name === worker.name &&
+                  w.mobileNumber === worker.mobileNumber,
+              ) ? (
+                <motion.div className="border mt-2 cursor-pointer rounded-lg bg-[#2C1810] text-[#FFFFFF] px-2 tex-sm blur-[1px]">
+                  Add to Job
+                </motion.div>
+              ) : (
+                <motion.div
+                  whileTap={{ y: 5 }}
+                  className="border mt-2 cursor-pointer rounded-lg bg-[#2C1810] text-[#FFFFFF] px-2 tex-sm"
+                  onClick={() => handleAddToJob(String(worker._id))}
+                >
+                  Add to Job
+                </motion.div>
+              )}
             </div>
           ))}
         </div>
@@ -142,7 +204,7 @@ function page() {
 
             <form
               id="form-rhf-demo"
-              onSubmit={form.handleSubmit(onSubmit)}
+              onSubmit={form.handleSubmit(handleAddWorker)}
               className="py-5 flex flex-col gap-5"
             >
               <FieldGroup>

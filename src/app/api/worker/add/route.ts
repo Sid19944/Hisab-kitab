@@ -45,7 +45,7 @@ export const POST = wrapAsync(async (req: NextRequest) => {
     throw new ErrorHandler("Worker already added with given data", 400);
   }
 
-  const worker = await WorkerModle.create(body);
+  const worker = await WorkerModle.create({ ...body, teamLeader: user._id });
   if (!worker) {
     throw new ErrorHandler("Error while adding the worker", 500);
   }

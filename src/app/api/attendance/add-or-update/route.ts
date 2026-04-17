@@ -17,11 +17,13 @@ export const POST = wrapAsync(async (req: NextRequest) => {
     throw new ErrorHandler("Not Authenticated", 400);
   }
 
-  const { date, status, worker } = await req.json();
-  if (!date || !status || !worker) {
+  const body = await req.json();
+  const { worker, job } = body;
+  if (!worker || !job) {
     throw new ErrorHandler("Provide all detils", 400);
   }
 
+  const date = new Date();
   const toDate = new Date(date).setHours(0, 0, 0, 0);
 
   const fWorker = await WorkerModle.findById(worker);
@@ -31,20 +33,26 @@ export const POST = wrapAsync(async (req: NextRequest) => {
 
   const alreadyCurrDay = await AttendanceModel.findOne({
     worker,
+    job,
     date: toDate,
   });
 
+  console.log(alreadyCurrDay)
+
   if (alreadyCurrDay) {
-    throw new ErrorHandler(
-      `Worker's attendance Already added for ${new Date(toDate).toLocaleDateString("en-In")}`,
-      400,
+    alreadyCurrDay.status = body.status;
+    await alreadyCurrDay.save();
+
+    return NextResponse.json(
+      { success: true, message: "Attendance Updated Successfully" },
+      { status: 200 },
     );
   }
 
   const newAttendance = await AttendanceModel.create({
     teamLeader: user._id,
-    date: toDate,
-    status,
+    job,
+    status: body?.status,
     worker,
   });
 

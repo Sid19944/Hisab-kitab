@@ -44,15 +44,11 @@ export const PUT = wrapAsync(async (req: NextRequest) => {
   if (!checkWorkerSchema.success) {
     const formatted = checkWorkerSchema.error.format();
 
-    const teamLeaderErr = formatted.teamLeader?._errors?.[0];
     const nameErr = formatted.name?._errors?.[0];
     const numberErr = formatted.mobileNumber?._errors?.[0];
 
-    console.log(teamLeaderErr, nameErr, numberErr);
-    throw new ErrorHandler(
-      `${teamLeaderErr ?? nameErr ?? numberErr ?? "Invalid Data"}`,
-      400,
-    );
+    console.log(nameErr, numberErr);
+    throw new ErrorHandler(`${nameErr ?? numberErr ?? "Invalid Data"}`, 400);
   }
 
   const worker = await WorkerModle.findByIdAndUpdate(id, {

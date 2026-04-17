@@ -4,7 +4,7 @@ interface Worker {
   mobileNumber: number;
 }
 
-export interface Job {
+export interface Job extends Document {
   jobName: string;
   user: ObjectId;
   workers?: Worker[];

@@ -45,7 +45,7 @@ function Navbar() {
             className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/land-detail" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
             href={pathname === "/" ? "#footer" : "/land-detail"}
           >
-            {pathname === "/" ? "Contact" : "Land Detail"}
+            {pathname === "/" ? "Contact" : "Land"}
           </Link>
           {pathname !== "/" && (
             <Link

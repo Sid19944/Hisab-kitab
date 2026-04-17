@@ -57,33 +57,34 @@ function page() {
       const axiosErr = err as AxiosError<ApiResponse>;
       toast.error(axiosErr.response?.data.message ?? "Failed to Create Job");
     } finally {
-      form.reset()
+      form.reset();
     }
   };
 
   return (
     <div>
-      <nav className="flex border justify-end gap-2 items-center p-2">
-        <h1>Selete Job</h1>
-        <Select
-          value={selectedJob}
-          onValueChange={(val) => setSelectedJob(val)}
-        >
-          <SelectTrigger className="w-full max-w-48">
-            <SelectValue placeholder="Select a Job" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Jobs</SelectLabel>
-              {jobs.map((job) => (
-                <SelectItem key={job._id} value={job._id}>
-                  {job.jobName}
-                </SelectItem>
-              ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
+      <nav className="flex border justify-end gap-2 items-center p-2 flex-col sm:flex-row">
+        <div className="flex items-center gap-2">
+          <h1>Selete Job</h1>
+          <Select
+            value={selectedJob}
+            onValueChange={(val) => setSelectedJob(val)}
+          >
+            <SelectTrigger className="w-fit max-w-48">
+              <SelectValue placeholder="Select a Job" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectLabel>Jobs</SelectLabel>
+                {jobs.map((job) => (
+                  <SelectItem key={job._id} value={job._id}>
+                    {job.jobName}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
         <motion.div
           whileTap={{ y: 5 }}
           className="border cursor-pointer rounded-lg bg-[#2C1810] text-[#FFFFFF] px-2"
@@ -164,7 +165,9 @@ function page() {
                 <Button
                   type="submit"
                   className="cursor-pointer w-[40%] bg-blue-500"
-                  onClick={() => {setAddjob(!addJob)}}
+                  onClick={() => {
+                    setAddjob(!addJob);
+                  }}
                 >
                   Add Job
                 </Button>

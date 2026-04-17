@@ -1,14 +1,19 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 
 export interface Attendance extends Document {
-  teamLeader: ObjectId;
+  teamLeader: string | ObjectId;
   date: Date;
-  status: number;
-  worker: ObjectId;
+  job: string;
+  status?: number;
+  worker: string | ObjectId;
 }
 
 const AttendanceSchema: Schema<Attendance> = new Schema(
   {
+    job: {
+      type: String,
+      required: true,
+    },
     teamLeader: {
       type: Schema.Types.ObjectId,
       ref: "TeamLeader",
@@ -17,9 +22,8 @@ const AttendanceSchema: Schema<Attendance> = new Schema(
     date: {
       type: Date,
       default: new Date(Date.now()).setHours(0, 0, 0, 0),
-      unique: true,
     },
-    status: { type: Number, enum: [1, 0.5, 0], required: true },
+    status: { type: Number, enum: [1, 0.5, 0] },
     worker: { type: Schema.Types.ObjectId, ref: "Worker", required: true },
   },
   { timestamps: true },

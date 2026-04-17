@@ -15,7 +15,7 @@ import { toast } from "sonner";
 interface Job {
   _id: string;
   jobName: string;
-  workers?: { _id: string; name: string; mobileNumber: number };
+  workers?: { _id: string; name: string; mobileNumber: number }[];
   completedDate?: Date;
   createdAt?: Date;
   updatedAt?: Date;
