@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <AuthProvider>
           {children}
-          <Toaster position={"top-center"} />
+          <Toaster position={"top-center"} duration={1000}/>
         </AuthProvider>
       </body>
     </html>

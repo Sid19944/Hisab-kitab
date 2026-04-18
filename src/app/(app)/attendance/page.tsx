@@ -71,7 +71,7 @@ function page() {
         backgroundSize: "40px 40px",
       }}
     >
-      <div className="my-3 px-4">
+      <div className="my-3 sticky top-12 bg-[#efece2] py-0.5 border-b border-[#9a4f21] rounded-lg px-1">
         <h1 className="text-3xl font-semibold">Mark Attendance</h1>
         <p className="text-sm text-[#ac8d7a]">Today's attendance</p>
       </div>
@@ -91,8 +91,9 @@ function page() {
             key={idx}
             className="border-t border-[#9a4f21] flex justify-between p-2"
           >
-            {}
-            <h1 className="w-[45%] sm:w-[40%]">{at.WorkerDetail.name}</h1>
+            <h1 className="w-[45%] sm:w-[40%] sm:font-semibold tracking-tight">
+              {at.WorkerDetail.name.toUpperCase()}
+            </h1>
             <div className="flex w-[55%] sm:w-[60%] justify-around">
               <input
                 type="radio"

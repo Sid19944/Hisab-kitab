@@ -6,7 +6,7 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import ErrorHandler from "@/utils/errorHandler";
 import LandDetailModel from "@/models/landDetail";
 
-export const DELETE = wrapAsync(async (req: NextRequest) => {
+export const GET = wrapAsync(async (req: NextRequest) => {
   await dbConnect();
 
   const session = await getServerSession(authOptions);
@@ -16,19 +16,12 @@ export const DELETE = wrapAsync(async (req: NextRequest) => {
     throw new ErrorHandler("Not Authenticated", 400);
   }
 
-  const body = await req.json();
-  const { id } = body;
-  if (!id) {
-    throw new ErrorHandler("Provide Land ID", 400);
-  }
-
-  const fLandDetail = await LandDetailModel.findByIdAndDelete(id);
-  if (!fLandDetail) {
-    throw new ErrorHandler("Invalid Land ID", 400);
-  }
+  const lands = await LandDetailModel.find({
+    landAssignTo: user._id,
+  });
 
   return NextResponse.json(
-    { success: true, message: "Land Detail Deleted Successfully" },
+    { success: true, message: "All Land Fetched", lands },
     { status: 200 },
   );
 });

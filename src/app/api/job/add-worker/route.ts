@@ -13,9 +13,9 @@ export const PUT = wrapAsync(async (req: NextRequest) => {
   const session = await getServerSession(authOptions);
   const user: User = session?.user as User;
 
-    if (!session || !session.user) {
-      throw new ErrorHandler("Not Authenticated", 400);
-    }
+  if (!session || !session.user) {
+    throw new ErrorHandler("Not Authenticated", 400);
+  }
 
   const { id, worker } = await req.json();
   if (!id) {
@@ -30,40 +30,35 @@ export const PUT = wrapAsync(async (req: NextRequest) => {
   if (!fWorker) {
     throw new ErrorHandler("Worker is not added yet", 400);
   }
-  const addWorker = {
-    name: fWorker.name,
-    mobileNumber: fWorker.mobileNumber,
-  };
 
   const fJob = await Job.findById(id);
   if (!fJob) {
     throw new ErrorHandler("Invalid Job ID", 400);
   }
   const checkWorkerAlreadyIn = fJob?.workers?.filter(
-    (worker) =>
-      worker.name === addWorker.name &&
-      worker.mobileNumber === addWorker.mobileNumber,
+    (worker) => worker.workerId == fWorker._id.toString(),
   );
 
   if (checkWorkerAlreadyIn?.length) {
     throw new ErrorHandler("Worker Already in this Job", 400);
   }
 
-    const job = await Job.findByIdAndUpdate(
-      id,
-      {
-        $push: {
-          workers: {
-            name: fWorker?.name,
-            mobileNumber: fWorker?.mobileNumber,
-          },
+  const job = await Job.findByIdAndUpdate(
+    id,
+    {
+      $push: {
+        workers: {
+          name: fWorker?.name,
+          mobileNumber: fWorker?.mobileNumber,
+          workerId: fWorker._id,
         },
       },
-      { new: true },
-    );
+    },
+    { new: true },
+  );
 
   return NextResponse.json(
-    { success: true, message: "Job Updated Successfully" },
+    { success: true, message: "Worker Added to Job" },
     { status: 200 },
   );
 });

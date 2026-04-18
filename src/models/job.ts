@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 interface Worker {
+  workerId: string;
   name: string;
   mobileNumber: number;
 }
@@ -25,6 +26,8 @@ const JobSchema: Schema<Job> = new Schema(
     },
     workers: [
       {
+        _id: false,
+        workerId: String,
         name: String,
         mobileNumber: Number,
       },

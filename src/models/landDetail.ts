@@ -5,8 +5,9 @@ export interface LandDetail extends Document {
   area: number;
   money: number;
   location: string;
+  job?: string | ObjectId;
   status: string;
-  landAssignTo: ObjectId;
+  landAssignTo: string | ObjectId;
 }
 
 const LandDetailSchema: Schema<LandDetail> = new Schema(
@@ -18,6 +19,7 @@ const LandDetailSchema: Schema<LandDetail> = new Schema(
     location: { type: String, required: true },
     area: { type: Number, required: true },
     money: { type: Number, required: true },
+    job: { type: String },
     status: {
       type: String,
       enum: ["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELED"],

@@ -25,7 +25,10 @@ export const PUT = wrapAsync(async (req: NextRequest) => {
     money: body?.money,
     location: body?.location,
     status: body?.status,
+    job : body?.job
   };
+
+  console.log(body)
 
   const landDetail = await LandDetailModel.findOneAndUpdate(
     {

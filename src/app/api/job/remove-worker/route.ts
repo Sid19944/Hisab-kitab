@@ -35,14 +35,14 @@ export const PUT = wrapAsync(async (req: NextRequest) => {
   const job = await Job.findByIdAndUpdate(
     id,
     {
-      $pull: { workers: { _id: worker } },
+      $pull: { workers: { workerId: worker } },
     },
     { new: true },
   );
 
 
   return NextResponse.json(
-    { success: true, message: "Job Updated Successfully" },
+    { success: true, message: "Worker Removed from Job" },
     { status: 200 },
   );
 });

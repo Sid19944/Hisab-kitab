@@ -27,7 +27,7 @@ function page() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [workers, setWorkers] = useState([]);
 
-  const { selectedJob, jobs } = useJob();
+  const { selectedJob, jobs, fetchJobs } = useJob();
   const form = useForm<z.infer<typeof workerSchema>>({
     resolver: zodResolver(workerSchema),
     mode: "onSubmit",
@@ -36,9 +36,6 @@ function page() {
       mobileNumber: "",
     },
   });
-
-  const findWorkerThatInCurrJob =
-    jobs.filter((job) => job._id === selectedJob)[0]?.workers ?? [];
 
   // add Worker
   const handleAddWorker = async (data: z.infer<typeof workerSchema>) => {
@@ -82,7 +79,6 @@ function page() {
         worker: workerId,
       });
 
-
       const addToAttendace = await axios.post(`/api/attendance/add-or-update`, {
         job: selectedJob,
         worker: workerId,
@@ -95,6 +91,27 @@ function page() {
         axiosErr.response?.data.message ??
           "Failed to add Workers to Current Job",
       );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleRemoveFromJob = async (workerId: string) => {
+    setIsSubmitting(true);
+    try {
+      const result = await axios.put(`/api/job/remove-worker`, {
+        id: selectedJob,
+        worker: workerId,
+      });
+      // const delteFromAttendance = await axios.delete(
+      //   `/api/attendance/${selectedJob}/delete/${workerId}`,
+      // );
+      toast.success(result.data.message);
+    } catch (err) {
+      const axiosErr = err as AxiosError<ApiResponse>;
+      toast.error(axiosErr.response?.data.message ?? "Failed to Remove Worker");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -103,6 +120,7 @@ function page() {
       try {
         const result = await axios.get(`/api/worker/get-all-worker`);
         setWorkers(result.data.workers);
+        fetchJobs();
       } catch (err) {
         const axiosErr = err as AxiosError<ApiResponse>;
         toast.error(
@@ -111,7 +129,10 @@ function page() {
       }
     })();
   }, [isSubmitting]);
-  
+
+  const findWorkerThatInCurrJob =
+    jobs.filter((job) => job._id === selectedJob)[0]?.workers ?? [];
+
   return (
     <div
       id="addWorker"
@@ -150,12 +171,13 @@ function page() {
               </div>
 
               {findWorkerThatInCurrJob.some(
-                (w) =>
-                  w.name === worker.name &&
-                  w.mobileNumber === worker.mobileNumber,
+                (w) => w.workerId === worker._id.toString(),
               ) ? (
-                <motion.div className="border mt-2 cursor-pointer rounded-lg bg-[#2C1810] text-[#FFFFFF] px-2 tex-sm blur-[1px]">
-                  Add to Job
+                <motion.div
+                  className="border mt-2 cursor-pointer border-red-500 rounded-lg bg-[#2C1810] text-[#FFFFFF] px-2 tex-sm blur-[0.4px]"
+                  onClick={() => handleRemoveFromJob(String(worker._id))}
+                >
+                  Remove From Job
                 </motion.div>
               ) : (
                 <motion.div

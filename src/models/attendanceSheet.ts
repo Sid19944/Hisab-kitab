@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, ObjectId } from "mongoose";
 export interface Attendance extends Document {
   teamLeader: string | ObjectId;
   date: Date;
-  job: string;
+  job: string | ObjectId;
   status?: number;
   worker: string | ObjectId;
 }
@@ -11,7 +11,8 @@ export interface Attendance extends Document {
 const AttendanceSchema: Schema<Attendance> = new Schema(
   {
     job: {
-      type: String,
+      type: Schema.Types.ObjectId,
+      ref : "Job",
       required: true,
     },
     teamLeader: {

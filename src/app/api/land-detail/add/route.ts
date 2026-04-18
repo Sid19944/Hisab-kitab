@@ -6,7 +6,6 @@ import { authOptions } from "../../auth/[...nextauth]/options";
 import ErrorHandler from "@/utils/errorHandler";
 import { landDetailSchema } from "@/schemas/landDetail";
 import LandDetailModel from "@/models/landDetail";
-import { success } from "zod";
 
 export const POST = wrapAsync(async (req: NextRequest) => {
   await dbConnect();
@@ -19,9 +18,10 @@ export const POST = wrapAsync(async (req: NextRequest) => {
   }
 
   const body = await req.json();
-  const { owner, location, area, money, status, landAssignTo } = body;
+  console.log(body)
+  const { owner, location, area, money, status } = body;
 
-  if (!owner || !location || !area || !money || !status || !landAssignTo) {
+  if (!owner || !location || !area || !money || !status ) {
     throw new ErrorHandler("Please Provide All Details", 400);
   }
 
@@ -31,7 +31,7 @@ export const POST = wrapAsync(async (req: NextRequest) => {
     area,
     money,
     status,
-    landAssignTo,
+    landAssignTo : user._id,
   };
 
   // zod validation
