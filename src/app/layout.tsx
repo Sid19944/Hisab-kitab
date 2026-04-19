@@ -4,6 +4,7 @@ import "./globals.css";
 import AuthProvider from "@/context/authProvider";
 
 import { Toaster } from "sonner";
+import { JobProvider } from "@/context/JobContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,8 +33,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <AuthProvider>
-          {children}
-          <Toaster position={"top-center"} duration={1000}/>
+          <JobProvider>
+            {children}
+            <Toaster position={"top-center"} duration={2000} />
+          </JobProvider>
         </AuthProvider>
       </body>
     </html>

@@ -8,12 +8,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import { signOut, useSession } from "next-auth/react";
 import { User } from "next-auth";
 import { usePathname } from "next/navigation";
+import { useJob } from "@/context/JobContext";
 
 function Navbar() {
   const [showNav, setShowNav] = useState(false);
   const { data: session } = useSession();
   const user: User = session?.user as User;
   const pathname = usePathname();
+
+  const {selectedJob} = useJob()
 
   return (
     <div className="sticky top-0 bg-[rgb(44,24,16)] text-[rgb(226,163,138)] z-10">
@@ -50,7 +53,7 @@ function Navbar() {
           {pathname !== "/" && (
             <Link
               className={`px-3 py-1 rounded-lg border hover:bg-[#FFFFFF] hover:text-[rgb(54,26,14)] ${pathname === "/salary" && "bg-[#FFFFFF] text-[rgb(54,26,14)] border-amber-500"}`}
-              href="/salary"
+              href={`/salary/${selectedJob}`}
             >
               Salary
             </Link>
@@ -117,7 +120,7 @@ function Navbar() {
               {pathname !== "/" && (
                 <Link
                   className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/salary" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
-                  href="/salary"
+                  href={`/salary/${selectedJob}`}
                 >
                   Salary
                 </Link>

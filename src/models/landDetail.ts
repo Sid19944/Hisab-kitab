@@ -19,7 +19,7 @@ const LandDetailSchema: Schema<LandDetail> = new Schema(
     location: { type: String, required: true },
     area: { type: Number, required: true },
     money: { type: Number, required: true },
-    job: { type: String },
+    job: { type: Schema.Types.ObjectId, ref: "Job" },
     status: {
       type: String,
       enum: ["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELED"],

@@ -25,10 +25,10 @@ export const PUT = wrapAsync(async (req: NextRequest) => {
     money: body?.money,
     location: body?.location,
     status: body?.status,
-    job : body?.job
+    job : body?.job === "" ? null : body?.job
   };
 
-  console.log(body)
+  // console.log(body, newData)
 
   const landDetail = await LandDetailModel.findOneAndUpdate(
     {

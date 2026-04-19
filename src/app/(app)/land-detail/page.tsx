@@ -69,9 +69,7 @@ function page() {
       toast.success(result.data.message);
     } catch (err) {
       const axiosErr = err as AxiosError<ApiResponse>;
-      toast.error(
-        axiosErr.response?.data.message ?? "Failed to Delete land",
-      );
+      toast.error(axiosErr.response?.data.message ?? "Failed to Delete land");
     } finally {
       setIsSubmitting(false);
       form.reset();

@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <>
       <Navbar />
-      <JobProvider>{children}</JobProvider>
+      {children}
       <Footer />
     </>
   );
