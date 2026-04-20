@@ -5,34 +5,39 @@ import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import { getServerSession, User } from "next-auth";
 import deductionsModel from "@/models/deduction";
-import { success } from "zod";
 
 export const POST = wrapAsync(async (req: NextRequest) => {
   await dbConnect();
 
-    const session = await getServerSession(authOptions);
-    const user: User = session?.user as User;
+  const session = await getServerSession(authOptions);
+  const user: User = session?.user as User;
 
-    if (!session || !session.user) {
-      throw new ErrorHandler("Not Authenticated", 400);
-    }
+  if (!session || !session.user) {
+    throw new ErrorHandler("Not Authenticated", 400);
+  }
 
   const body = await req.json();
-  const { job, workerId, amount } = body;
+  const { job, workerId, amount, date } = body;
 
-  if (!job || !workerId || !amount) {
+  if (!job || !workerId || !amount || !date) {
     throw new ErrorHandler("Prove All Detail", 400);
   }
 
-  const today = new Date(new Date()).setHours(0, 0, 0, 0);
+  const today = new Date(date);
 
-  const alreadyForToday = await deductionsModel.findOne({
-    $and: [{ job }, { worker: workerId }, { date: today }],
-  });
+  // const alreadyForToday = await deductionsModel.findOne({
+  //   $and: [
+  //     { job },
+  //     { worker: workerId },
+  //     { date: today },
+  //   ],
+  // });
 
-  if (alreadyForToday) {
-    throw new ErrorHandler("Entery Alredy for Today, try update", 400);
-  }
+  // // console.log(alreadyForToday)
+
+  // if (alreadyForToday) {
+  //   throw new ErrorHandler("Entery Alredy for Today, try update", 400);
+  // }
 
   const deduction = await deductionsModel.create({
     job,

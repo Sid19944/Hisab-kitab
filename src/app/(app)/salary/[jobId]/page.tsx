@@ -4,29 +4,43 @@ import { Deduction } from "@/models/deduction";
 import { LandDetail } from "@/models/landDetail";
 import { ApiResponse } from "@/types/ApiResponse";
 import axios, { AxiosError } from "axios";
+import { IndianRupee, Plus, X } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { AnimatePresence, easeInOut, motion } from "framer-motion";
 
-
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import { Button } from "@/components/ui/button";
+import { useJob } from "@/context/JobContext";
 
 type data = {
-  deductions : Deduction[]
-  lands: LandDetail[]
+  deductions: Deduction[];
+  lands: LandDetail[];
   workerId: string;
-  worker : string;
-  mobileNumber : number;
-  workingDays : number;
-  totalDays : number;
-  totalLandMoney : number;
-  totalDeduction : number
+  worker: string;
+  mobileNumber: number;
+  workingDays: number;
+  totalDays: number;
+  totalLandMoney: number;
+  totalDeduction: number;
 };
 
 function page() {
   const [data, setData] = useState<data[]>([]);
   const { jobId } = useParams();
+  const [showDeduction, setShowDeduction] = useState(false);
+  const [date, setDate] = useState<Dayjs | null>(null);
+  const [amount, setAmount] = useState<number | undefined>(undefined);
+  const [selectedWorker, setSelectedWorker] = useState("");
+  const [workerId, setWorkerId] = useState("");
+  const { selectedJob } = useJob();
 
-  useEffect(() => {
+  const WorkerWithAttendance = () => {
     axios
       .get(`/api/salary/get/${jobId}`)
       .then((res) => setData(res.data.workerWithAttendance))
@@ -37,14 +51,46 @@ function page() {
             "Failed to add new Land to Current Job",
         );
       });
+  };
+  useEffect(() => {
+    WorkerWithAttendance();
   }, []);
 
-  console.log(data);
   const totalWorkingDays = data.reduce((sum, currVal) => {
     return sum + currVal.workingDays;
   }, 0);
 
-  // console.log(totalWorkingDays);
+  const clearData = () => {
+    setShowDeduction(!showDeduction);
+    setSelectedWorker("");
+    setWorkerId("");
+    setAmount(undefined);
+    setDate(null);
+    WorkerWithAttendance();
+  };
+
+  const handleAddDeduction = async () => {
+    axios
+      .post(`/api/deduction/add`, {
+        job: selectedJob,
+        workerId,
+        amount,
+        date,
+      })
+      .then((res) => {
+        toast.success(res.data.message);
+      })
+      .catch((err) => {
+        const axiosErr = err as AxiosError<ApiResponse>;
+        toast.error(
+          axiosErr.response?.data.message ??
+            "Failed to add new Land to Current Job",
+        );
+      })
+      .finally(() => {
+        clearData();
+      });
+  };
 
   return (
     <div
@@ -73,7 +119,7 @@ function page() {
 
           <h1>Working Days : {totalWorkingDays} Days</h1>
         </div>
-        <div className="bg-[#efe4c1] p-2 hidden sm:grid sm:grid-cols-5 text-center rounded-lg">
+        <div className="bg-[#efe4c1] p-2 hidden sm:grid sm:grid-cols-5 text-center rounded-lg font-semibold">
           <h1 className="text-start">Worker</h1>
           <h1>Present</h1>
           <h1>Deduction</h1>
@@ -85,8 +131,16 @@ function page() {
             <div className="sm:hidden flex justify-between border-[1.5px] border-[#E8D5B0] py-2 px-1 rounded-t-lg">
               <h1 className="mr-3">{d.worker}</h1>
               <h1 className="mr-3">{d.workingDays} D</h1>
-              <h1 className="mr-3 text-red-600">
-                -{d.totalDeduction}
+              <h1 className="mr-3 text-red-600 flex gap-1">
+                -{d.totalDeduction}{" "}
+                <Plus
+                  className="rounded-full bg-red-200 active:bg-red-500"
+                  onClick={() => {
+                    setShowDeduction(!showDeduction);
+                    setSelectedWorker(d.worker);
+                    setWorkerId(d.workerId);
+                  }}
+                />
               </h1>
             </div>
 
@@ -109,11 +163,19 @@ function page() {
               </h1>
             </div>
 
-            <div className="hidden sm:grid sm:grid-cols-5 text-center">
+            <div className="hidden sm:grid sm:grid-cols-5 text-center border-[1.5px] border-[#E8D5B0] p-1 rounded-lg">
               <h1 className="mr-3 text-start">{d.worker}</h1>
               <h1 className="mr-3">{d.workingDays} D</h1>
               <h1 className="mr-3 text-red-600">
-                -{d.totalDeduction}
+                -{d.totalDeduction}{" "}
+                <Plus
+                  className="rounded-full bg-red-200 active:bg-red-500"
+                  onClick={() => {
+                    setShowDeduction(!showDeduction);
+                    setSelectedWorker(d.worker);
+                    setWorkerId(d.workerId);
+                  }}
+                />
               </h1>
               <h1 className="mr-3">
                 {(
@@ -121,7 +183,9 @@ function page() {
                   d.workingDays
                 ).toFixed(2)}
               </h1>
-              <h1 className={`mr-3 ${(d.totalLandMoney / totalWorkingDays) * d.workingDays - d.totalDeduction < 0 ? "text-red-600" : "text-green-600"} underline`}>
+              <h1
+                className={`mr-3 ${(d.totalLandMoney / totalWorkingDays) * d.workingDays - d.totalDeduction < 0 ? "text-red-600" : "text-green-600"} underline`}
+              >
                 {(
                   (d.totalLandMoney / totalWorkingDays) * d.workingDays -
                   d.totalDeduction
@@ -131,6 +195,55 @@ function page() {
           </div>
         ))}
       </div>
+
+      <AnimatePresence>
+        {!showDeduction && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0.5, ease: easeInOut }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-100 p-4 rounded-lg border border-gray-950 flex flex-col justify-center gap-2 w-[90%] sm:w-fit"
+          >
+            <X className="absolute right-2 top-2" onClick={clearData} />
+            <h1 className="text-3xl text-center font-semibold mt-3">
+              Add Deduction For
+            </h1>
+            <h1 className="text-xl font-semibold text-center">
+              {selectedWorker.toUpperCase()}
+            </h1>
+            <div className="flex flex-col">
+              <div className="flex gap-2">
+                <label htmlFor="amount" className="flex gap-1">
+                  Amount <IndianRupee />
+                </label>
+                <input
+                  type="number"
+                  id="amount"
+                  className="border-2 border-amber-900 rounded-lg px-2 w-40"
+                  defaultValue={amount}
+                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                    setAmount(Number(e.target.value))
+                  }
+                />
+              </div>
+              {!amount && (
+                <p className="text-sm text-red-500 text-center">
+                  Enter Amount{" "}
+                </p>
+              )}
+            </div>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                value={date}
+                onChange={(newDate) => setDate(newDate)}
+              />
+            </LocalizationProvider>
+            <Button onClick={handleAddDeduction}>ADD</Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

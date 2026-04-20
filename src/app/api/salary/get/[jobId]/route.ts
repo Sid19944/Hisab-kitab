@@ -92,9 +92,12 @@ export const GET = wrapAsync(
           totalDays: 1,
           deductions: 1,
           lands: 1,
-          totalLandMoney: { $sum : "$lands.money"},
+          totalLandMoney: { $sum: "$lands.money" },
           totalDeduction: { $sum: "$deductions.amount" },
         },
+      },
+      {
+        $sort: { worker: 1 },
       },
     ]);
 
