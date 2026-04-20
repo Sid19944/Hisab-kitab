@@ -2,7 +2,7 @@
 
 import { workerSchema } from "@/schemas/worker";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { AnimatePresence, easeInOut, motion } from "framer-motion";
@@ -26,6 +26,16 @@ function page() {
   const [addWorker, setAddWorker] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [workers, setWorkers] = useState([]);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (addWorker) {
+      // small delay for animation to complete first
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
+    }
+  }, [addWorker]);
 
   const { selectedJob, jobs, fetchJobs } = useJob();
   const form = useForm<z.infer<typeof workerSchema>>({
@@ -244,6 +254,7 @@ function page() {
                         aria-invalid={fieldState.invalid}
                         placeholder="Enter Worker Name"
                         autoComplete="off"
+                        ref={inputRef}
                         className="bg-[#FFFFFF]"
                       />
                       {fieldState.invalid && (

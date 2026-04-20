@@ -4,9 +4,9 @@ import { Deduction } from "@/models/deduction";
 import { LandDetail } from "@/models/landDetail";
 import { ApiResponse } from "@/types/ApiResponse";
 import axios, { AxiosError } from "axios";
-import { IndianRupee, Plus, X } from "lucide-react";
+import { Edit, Edit2, IndianRupee, Plus, X } from "lucide-react";
 import { useParams } from "next/navigation";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AnimatePresence, easeInOut, motion } from "framer-motion";
 
@@ -39,6 +39,8 @@ function page() {
   const [selectedWorker, setSelectedWorker] = useState("");
   const [workerId, setWorkerId] = useState("");
   const { selectedJob } = useJob();
+  const [showEditDeduction, setShowEditDeduction] = useState(false);
+  const amountRef = useRef<HTMLInputElement>(null);
 
   const WorkerWithAttendance = () => {
     axios
@@ -55,6 +57,15 @@ function page() {
   useEffect(() => {
     WorkerWithAttendance();
   }, []);
+
+  useEffect(() => {
+    if (showDeduction) {
+      // small delay for animation to complete first
+      setTimeout(() => {
+        amountRef.current?.focus();
+      }, 300);
+    }
+  }, [showDeduction]);
 
   const totalWorkingDays = data.reduce((sum, currVal) => {
     return sum + currVal.workingDays;
@@ -89,6 +100,24 @@ function page() {
       })
       .finally(() => {
         clearData();
+      });
+  };
+
+  // console.log(data.find((d) => d.workerId === workerId));
+
+  const deleteDeduction = async (id: string) => {
+    axios
+      .delete(`/api/deduction/delete/${id}`)
+      .then((res) => {
+        toast.success(res.data.message);
+        WorkerWithAttendance();
+      })
+      .catch((err) => {
+        const axiosErr = err as AxiosError<ApiResponse>;
+        toast.error(
+          axiosErr.response?.data.message ??
+            "Failed to add new Land to Current Job",
+        );
       });
   };
 
@@ -141,6 +170,13 @@ function page() {
                     setWorkerId(d.workerId);
                   }}
                 />
+                <Edit
+                  onClick={() => {
+                    setShowEditDeduction(!showDeduction);
+                    setSelectedWorker(d.worker);
+                    setWorkerId(d.workerId);
+                  }}
+                />
               </h1>
             </div>
 
@@ -166,12 +202,19 @@ function page() {
             <div className="hidden sm:grid sm:grid-cols-5 text-center border-[1.5px] border-[#E8D5B0] p-1 rounded-lg">
               <h1 className="mr-3 text-start">{d.worker}</h1>
               <h1 className="mr-3">{d.workingDays} D</h1>
-              <h1 className="mr-3 text-red-600">
+              <h1 className="mr-3 text-red-600 flex justify-center gap-1">
                 -{d.totalDeduction}{" "}
                 <Plus
                   className="rounded-full bg-red-200 active:bg-red-500"
                   onClick={() => {
                     setShowDeduction(!showDeduction);
+                    setSelectedWorker(d.worker);
+                    setWorkerId(d.workerId);
+                  }}
+                />
+                <Edit
+                  onClick={() => {
+                    setShowEditDeduction(!showDeduction);
                     setSelectedWorker(d.worker);
                     setWorkerId(d.workerId);
                   }}
@@ -196,8 +239,9 @@ function page() {
         ))}
       </div>
 
+      {/* Add Deduction div */}
       <AnimatePresence>
-        {!showDeduction && (
+        {showDeduction && (
           <motion.div
             initial={{ scale: 0, opacity: 0 }}
             whileInView={{ scale: 1, opacity: 1 }}
@@ -220,6 +264,7 @@ function page() {
                 <input
                   type="number"
                   id="amount"
+                  ref={amountRef}
                   className="border-2 border-amber-900 rounded-lg px-2 w-40"
                   defaultValue={amount}
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -241,6 +286,46 @@ function page() {
               />
             </LocalizationProvider>
             <Button onClick={handleAddDeduction}>ADD</Button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Delete deduction div */}
+      <AnimatePresence>
+        {showEditDeduction && (
+          <motion.div
+            initial={{ scale: 0, opacity: 0 }}
+            whileInView={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ duration: 0.5, ease: easeInOut }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-amber-100 p-4 rounded-lg border border-gray-950 flex flex-col justify-center gap-2 w-[90%] sm:w-fit"
+          >
+            <X
+              className="absolute right-2 top-2"
+              onClick={() => {
+                setShowEditDeduction(!showEditDeduction);
+                clearData();
+              }}
+            />
+            <h1 className="text-3xl text-center font-semibold mt-3">
+              Delete Deduction For
+            </h1>
+            <h1 className="text-xl font-semibold text-center">
+              {selectedWorker.toUpperCase()}
+            </h1>
+            <div className="grid grid-cols-4 gap-2">
+              {data
+                .find((d) => d.workerId === workerId)
+                ?.deductions.map((ded, idx) => (
+                  <div
+                    key={idx}
+                    className="flex gap-1 border p-1 justify-around rounded-lg border-amber-800 text-red-500"
+                  >
+                    <h1>-{ded.amount}</h1>
+                    <X onClick={() => deleteDeduction(ded._id)} />
+                  </div>
+                ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

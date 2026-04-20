@@ -12,7 +12,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { AnimatePresence, easeInOut, motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { X } from "lucide-react";
 import {
   NativeSelect,
@@ -30,6 +30,16 @@ function page() {
   const [lands, setLands] = useState<LandDetail[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { selectedJob } = useJob();
+  const inputRef = useRef<HTMLInputElement>(null)
+
+    useEffect(() => {
+      if (addLand) {
+        // small delay for animation to complete first
+        setTimeout(() => {
+          inputRef.current?.focus();
+        }, 300);
+      }
+    }, [addLand]);
 
   const form = useForm<z.infer<typeof landDetailSchema>>({
     resolver: zodResolver(landDetailSchema),
@@ -244,6 +254,7 @@ function page() {
                       <Input
                         {...field}
                         id="owner"
+                        ref={inputRef}
                         placeholder="Enter Land Owner Name"
                         className="bg-[#FFFFFF]"
                         autoComplete="off"

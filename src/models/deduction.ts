@@ -1,5 +1,6 @@
 import mongoose, { Schema, Document, ObjectId } from "mongoose";
 export interface Deduction {
+  _id: string;
   job: string | ObjectId;
   worker: string | ObjectId;
   amount: number;
