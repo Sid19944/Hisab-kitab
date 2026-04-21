@@ -62,8 +62,8 @@ function page() {
   };
 
   return (
-    <div>
-      <nav className="flex border justify-end gap-2 items-center p-2 flex-col sm:flex-row">
+    <div className="flex-1 bg-[#FFFDF5]">
+      <nav className="flex border justify-end gap-1 items-center p-2 flex-col sm:flex-row">
         <div className="flex items-center gap-2">
           <h1>Selete Job</h1>
           <Select
@@ -176,6 +176,46 @@ function page() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <div className="p-2 flex gap-2 flex-col">
+        <div className="flex justify-around">
+          <div className="border border-[#E8D5B0] w-[30%] p-2 rounded-lg bg-[#FFFFFF]">
+            <h1>12</h1>
+            <h1>Total </h1>
+            <h1>2 </h1>
+          </div>
+          <div className="border border-[#E8D5B0] w-[30%] p-2 rounded-lg bg-[#FFFFFF]">
+            <h1>12</h1>
+            <h1>Total </h1>
+            <h1>2 </h1>
+          </div>
+          <div className="border border-[#E8D5B0] w-[30%] p-2 rounded-lg bg-[#FFFFFF]">
+            <h1>12</h1>
+            <h1>Total </h1>
+            <h1>2 </h1>
+          </div>
+        </div>
+
+        <div className="rounded-t-lg">
+          <ul className="flex justify-between p-2 border border-amber-800 rounded-t-lg">
+            <li className="w-[40%]">WORKER</li>
+            <div className="w-[60%] flex justify-around">
+              <li>STATUS</li>
+              <li>DAYS</li>
+              <li>SALARY</li>
+            </div>
+          </ul>
+
+          <div className="flex justify-around p-2 border-x border-amber-700 border-b">
+            <h1 className="text-start w-[40%]">Siddharth Sarkar</h1>
+            <div className="w-[60%] flex justify-around">
+              <h1>STATUS</h1>
+              <h1>20 </h1>
+              <h1>50000</h1>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
