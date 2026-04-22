@@ -33,10 +33,10 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col" suppressHydrationWarning>
         <AuthProvider>
-          <JobProvider>
+          {/* <JobProvider> */}
             {children}
             <Toaster position={"top-center"} duration={2000} />
-          </JobProvider>
+          {/* </JobProvider> */}
         </AuthProvider>
       </body>
     </html>

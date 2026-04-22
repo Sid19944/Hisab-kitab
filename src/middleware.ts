@@ -16,6 +16,18 @@ export async function middleware(req: NextRequest) {
   if (!token && url.pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
+  if (!token && url.pathname.startsWith("/land-detail")) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
+  if (!token && url.pathname.startsWith("/salary")) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
+  if (!token && url.pathname.startsWith("/workers")) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
+  if (!token && url.pathname.startsWith("/attendance")) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
+  }
 
   if(token && token.isVerified && url.pathname.startsWith("/verify")){
     return NextResponse.redirect(new URL("/dashboard", req.url))
@@ -25,5 +37,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/sign-in", "/sign-up", "/dashboard/:path*", "/verify/:path*"],
+  matcher: ["/sign-in", "/sign-up", "/dashboard/:path*", "/verify/:path*","/land-detail/:path*","/salary/:path*","/workers/:path*","/attendance/:path*"],
 };

@@ -30,16 +30,16 @@ function page() {
   const [lands, setLands] = useState<LandDetail[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { selectedJob } = useJob();
-  const inputRef = useRef<HTMLInputElement>(null)
+  const inputRef = useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-      if (addLand) {
-        // small delay for animation to complete first
-        setTimeout(() => {
-          inputRef.current?.focus();
-        }, 300);
-      }
-    }, [addLand]);
+  useEffect(() => {
+    if (addLand) {
+      // small delay for animation to complete first
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
+    }
+  }, [addLand]);
 
   const form = useForm<z.infer<typeof landDetailSchema>>({
     resolver: zodResolver(landDetailSchema),
@@ -125,6 +125,26 @@ function page() {
     }
   };
 
+  const updateStatus = async (landId: string, status: string) => {
+    setIsSubmitting(true);
+    try {
+      const result = await axios.put(`/api/land-detail/update`, {
+        id: landId,
+        status,
+      });
+
+      toast.success(result?.data.message);
+    } catch (err) {
+      const axiosErr = err as AxiosError<ApiResponse>;
+      toast.error(
+        axiosErr.response?.data.message ??
+          "Failed to add new Land to Current Job",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   useEffect(() => {
     axios
       .get(`/api/land-detail/get-all`)
@@ -189,7 +209,23 @@ function page() {
                 <h1>Budget :</h1>
                 <h1>{land.money}</h1>
               </div>
-              {/* <h1>{land._id.toString()}</h1> */}
+
+              <NativeSelect
+                className="w-full mt-1"
+                value={land.status}
+                onChange={(e) => updateStatus(String(land._id), e.target.value)}
+              >
+                <NativeSelectOption value="PENDING">Pending</NativeSelectOption>
+                <NativeSelectOption value="IN_PROGRESS">
+                  In Progress
+                </NativeSelectOption>
+                <NativeSelectOption value="COMPLETED">
+                  Completed
+                </NativeSelectOption>
+                <NativeSelectOption value="CANCELED">
+                  Cancelled
+                </NativeSelectOption>
+              </NativeSelect>
             </div>
 
             {land.job === selectedJob ? (

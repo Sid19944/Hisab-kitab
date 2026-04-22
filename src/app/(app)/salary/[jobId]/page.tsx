@@ -103,8 +103,6 @@ function page() {
       });
   };
 
-  // console.log(data.find((d) => d.workerId === workerId));
-
   const deleteDeduction = async (id: string) => {
     axios
       .delete(`/api/deduction/delete/${id}`)

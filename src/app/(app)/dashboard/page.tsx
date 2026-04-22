@@ -27,16 +27,48 @@ import { Button } from "@/components/ui/button";
 import axios, { AxiosError } from "axios";
 import { toast } from "sonner";
 import { ApiResponse } from "@/types/ApiResponse";
-import { Job } from "@/models/job";
 import { useJob } from "@/context/JobContext";
+import { Deduction } from "@/models/deduction";
+import { LandDetail } from "@/models/landDetail";
+import CountUp from "react-countup";
 
 const jobSchema = z.object({
   jobName: z.string().min(1, "Enter Job Name"),
 });
 
+type data = {
+  deductions: Deduction[];
+  lands: LandDetail[];
+  workerId: string;
+  worker: string;
+  mobileNumber: number;
+  workingDays: number;
+  totalDays: number;
+  totalLandMoney: number;
+  totalDeduction: number;
+};
+
+type Record = {
+  date: Date;
+  status?: number;
+};
+
+type AllAttendace = {
+  _id: string;
+  date: string;
+  job: string;
+  status: number;
+  worker: string;
+};
+
 function page() {
   const [addJob, setAddjob] = useState(false);
   const { jobs, fetchJobs, selectedJob, setSelectedJob } = useJob();
+  const [workerWithAttendance, setWorkerWithAttendance] = useState<data[]>([]);
+  const [allAttendace, setAllAttendace] = useState<AllAttendace[]>([]);
+  let presentToday = 0;
+  let haltDayToday = 0;
+  let absentToday = 0;
 
   const form = useForm<z.infer<typeof jobSchema>>({
     resolver: zodResolver(jobSchema),
@@ -60,6 +92,44 @@ function page() {
       form.reset();
     }
   };
+
+  const totalWorkingDays = workerWithAttendance.reduce((sum, currVal) => {
+    return sum + currVal.workingDays;
+  }, 0);
+
+  useEffect(() => {
+    selectedJob &&
+      axios
+        .get(`/api/salary/get/${selectedJob}`)
+        .then((res) => setWorkerWithAttendance(res.data.workerWithAttendance))
+        .catch((err) => {
+          const axiosErr = err as AxiosError<ApiResponse>;
+          toast.error(
+            axiosErr.response?.data.message ??
+              "Failed to add new Land to Current Job",
+          );
+        });
+
+    selectedJob &&
+      axios
+        .get(`/api/attendance/todaysData/${selectedJob}`)
+        .then((res) => setAllAttendace(res.data.today))
+        .catch((err) => {
+          const axiosErr = err as AxiosError<ApiResponse>;
+          toast.error(
+            axiosErr.response?.data.message ?? "Failed to Load Workers",
+          );
+        });
+  }, [selectedJob]);
+
+  allAttendace &&
+    allAttendace.map((at) => {
+      at.status == 1
+        ? (presentToday += 1)
+        : at.status == 0.5
+          ? (haltDayToday += 1)
+          : (absentToday += 1);
+    });
 
   return (
     <div className="flex-1 bg-[#FFFDF5]">
@@ -177,43 +247,92 @@ function page() {
         )}
       </AnimatePresence>
 
-      <div className="p-2 flex gap-2 flex-col">
-        <div className="flex justify-around">
-          <div className="border border-[#E8D5B0] w-[30%] p-2 rounded-lg bg-[#FFFFFF]">
-            <h1>12</h1>
-            <h1>Total </h1>
-            <h1>2 </h1>
+      <div className="p-4 flex gap-5 flex-col ">
+        <div className="flex justify-between flex-col gap-3 sm:flex-row">
+          <div className="border border-[#E8D5B0] p-2 rounded-lg bg-[#FFFFFF] w-full flex flex-col justify-center">
+            <CountUp
+              className="text-2xl"
+              end={workerWithAttendance.length}
+              duration={2}
+            />
+
+            <h1>Total Worker</h1>
           </div>
-          <div className="border border-[#E8D5B0] w-[30%] p-2 rounded-lg bg-[#FFFFFF]">
-            <h1>12</h1>
-            <h1>Total </h1>
-            <h1>2 </h1>
+          <div className="border border-[#E8D5B0] p-2 rounded-lg bg-[#FFFFFF] w-full flex flex-col justify-center">
+            <h1 className="sm:text-xl text-green-600">
+              {presentToday} Full Today
+            </h1>
+            <h1 className="sm:text-xl text-yellow-600">
+              {haltDayToday} half day
+            </h1>
+            <h1 className="sm:text-xl text-red-600">{absentToday} absent</h1>
           </div>
-          <div className="border border-[#E8D5B0] w-[30%] p-2 rounded-lg bg-[#FFFFFF]">
-            <h1>12</h1>
-            <h1>Total </h1>
-            <h1>2 </h1>
+          <div className="border border-[#E8D5B0] p-2 rounded-lg bg-[#FFFFFF] w-full flex flex-col justify-center">
+            <CountUp
+              className="text-2xl text-green-700"
+              end={workerWithAttendance[0]?.totalLandMoney}
+              duration={2}
+            />
+            <h1>Total Earning </h1>
+            <h1 className="text-green-500">
+              <CountUp
+                end={Number(
+                  (
+                    workerWithAttendance[0]?.totalLandMoney / totalWorkingDays
+                  ).toFixed(2),
+                )}
+                duration={2}
+              />
+              / Day
+            </h1>
           </div>
         </div>
 
         <div className="rounded-t-lg">
-          <ul className="flex justify-between p-2 border border-amber-800 rounded-t-lg">
-            <li className="w-[40%]">WORKER</li>
-            <div className="w-[60%] flex justify-around">
+          <ul className="flex text-sm sm:text-lg font-semibold justify-between p-2 border border-amber-800 rounded-t-lg">
+            <li className="w-[35%]">WORKER</li>
+            <div className="w-[70%] flex justify-around">
               <li>STATUS</li>
               <li>DAYS</li>
               <li>SALARY</li>
             </div>
           </ul>
 
-          <div className="flex justify-around p-2 border-x border-amber-700 border-b">
-            <h1 className="text-start w-[40%]">Siddharth Sarkar</h1>
-            <div className="w-[60%] flex justify-around">
-              <h1>STATUS</h1>
-              <h1>20 </h1>
-              <h1>50000</h1>
+          {workerWithAttendance.map((w, idx) => (
+            <div
+              className="flex justify-around p-2 border-x border-amber-700 border-b"
+              key={idx}
+            >
+              <h1 className="text-start w-[35%]">{w.worker}</h1>
+              <div className="w-[70%] flex justify-around">
+                {allAttendace.find((at) => at.worker == w.workerId) ? (
+                  <h1
+                    className={`text-sm h-fit sm:text-lg tracking-tight sm:font-semibold ${allAttendace.find((at) => at.worker == w.workerId)?.status == 1 ? "text-green-700 px-3 rounded-lg bg-[#E5EBE7]" : allAttendace.find((at) => at.worker == w.workerId)?.status == 0.5 ? "text-yellow-700 px-3 rounded-lg bg-[#f6e8c7]" : "text-red-600 px-3 rounded-lg bg-[#FFEFEF]"}`}
+                  >
+                    {allAttendace.find((at) => at.worker == w.workerId)
+                      ?.status == 1
+                      ? "Present"
+                      : allAttendace.find((at) => at.worker == w.workerId)
+                            ?.status == 0.5
+                        ? "Half"
+                        : "Absent"}
+                  </h1>
+                ) : (
+                  "Not Yet"
+                )}
+
+                <h1>{w.workingDays}</h1>
+                <h1
+                  className={`mr-3 ${(w.totalLandMoney / totalWorkingDays) * w.workingDays - w.totalDeduction < 0 ? "text-red-600" : "text-green-600"} underline`}
+                >
+                  {(
+                    (w.totalLandMoney / totalWorkingDays) * w.workingDays -
+                    w.totalDeduction
+                  ).toFixed(2)}
+                </h1>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
     </div>

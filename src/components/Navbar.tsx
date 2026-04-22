@@ -16,7 +16,7 @@ function Navbar() {
   const user: User = session?.user as User;
   const pathname = usePathname();
 
-  const {selectedJob} = useJob()
+  const { selectedJob } = useJob();
 
   return (
     <div className="sticky top-0 bg-[rgb(44,24,16)] text-[rgb(226,163,138)] z-10">
@@ -62,11 +62,13 @@ function Navbar() {
         {pathname === "/" ? (
           <Link href="/sign-up">
             <Button className="text-xl p-5 cursor-pointer bg-[rgb(212,160,23)] text-[rgb(86,63,7)]">
-              {!user?.isVerified ? "Sign Up" :"Dashboard" }
+              {!user?.isVerified ? "Sign Up" : "Dashboard"}
             </Button>
           </Link>
         ) : (
-          "Avatar"
+          <Button onClick={() => signOut()} className="bg-amber-500 w-30 mr-5">
+            Sign Out <LogOut />
+          </Button>
         )}
       </nav>
 
@@ -91,7 +93,7 @@ function Navbar() {
               exit={{ opacity: 0, y: -100 }}
               transition={{ duration: 0.6 }}
               className={`absolute top-12 flex gap-2 flex-col w-full bg-[rgb(44,24,16)] rounded-b-lg z-1`}
-              onClick={()=>setShowNav(false)}
+              onClick={() => setShowNav(false)}
             >
               <Link
                 className={`border-b border-[#FFFFFF] px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md ${pathname === "/dashboard" && "bg-[#FFFFFF] text-[rgb(54,26,14)]"} `}
@@ -131,16 +133,16 @@ function Navbar() {
                   className="flex items-center justify-center "
                 >
                   <Button className="text-lg mb-3 cursor-pointer bg-[rgb(212,160,23)] text-[rgb(86,63,7)] w-[90%]">
-                    {!user?.isVerified ? "Sign Up" :"Dashboard" }
+                    {!user?.isVerified ? "Sign Up" : "Dashboard"}
                   </Button>
                 </Link>
               ) : (
                 <div className="flex justify-between border-b border-[#FFFFFF] mb-2 rounded-lg">
                   <Link
                     className=" px-3 py-1 hover:bg-[#FFFFFF] rounded-lg shadow-md w-full"
-                    href="/user"
+                    href="/"
                   >
-                    User
+                    Home
                   </Link>
 
                   <Button
