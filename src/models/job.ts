@@ -7,7 +7,7 @@ interface Worker {
 
 export interface Job extends Document {
   jobName: string;
-  user: ObjectId;
+  user: ObjectId | string;
   workers?: Worker[];
   completedDate?: Date;
   createdAt?: Date;

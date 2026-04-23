@@ -5,6 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../../auth/[...nextauth]/options";
 import ErrorHandler from "@/utils/errorHandler";
 import { Job } from "@/models/job";
+import mongoose from "mongoose";
 
 export const POST = wrapAsync(async (req: NextRequest) => {
   await dbConnect();
