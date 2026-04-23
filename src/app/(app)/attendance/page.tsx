@@ -61,7 +61,7 @@ function page() {
       });
   }, [isSubmitting]);
 
-  console.log(allAttendace)
+  // console.log(allAttendace)
 
   return (
     <div

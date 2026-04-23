@@ -4,17 +4,15 @@ import { Deduction } from "@/models/deduction";
 import { LandDetail } from "@/models/landDetail";
 import { ApiResponse } from "@/types/ApiResponse";
 import axios, { AxiosError } from "axios";
-import { Edit, Edit2, IndianRupee, Plus, X } from "lucide-react";
-import { useParams } from "next/navigation";
+import { Edit, IndianRupee, Plus, X } from "lucide-react";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 import { AnimatePresence, easeInOut, motion } from "framer-motion";
 
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
+import { Dayjs } from "dayjs";
 import { Button } from "@/components/ui/button";
 import { useJob } from "@/context/JobContext";
 
@@ -32,7 +30,6 @@ type data = {
 
 function page() {
   const [data, setData] = useState<data[]>([]);
-  const { jobId } = useParams();
   const [showDeduction, setShowDeduction] = useState(false);
   const [date, setDate] = useState<Dayjs | null>(null);
   const [amount, setAmount] = useState<number | undefined>(undefined);
@@ -44,7 +41,7 @@ function page() {
 
   const WorkerWithAttendance = () => {
     axios
-      .get(`/api/salary/get/${jobId}`)
+      .get(`/api/salary/get/${selectedJob}`)
       .then((res) => setData(res.data.workerWithAttendance))
       .catch((err) => {
         const axiosErr = err as AxiosError<ApiResponse>;
@@ -55,8 +52,8 @@ function page() {
       });
   };
   useEffect(() => {
-    WorkerWithAttendance();
-  }, []);
+    selectedJob && WorkerWithAttendance();
+  }, [selectedJob]);
 
   useEffect(() => {
     if (showDeduction) {
