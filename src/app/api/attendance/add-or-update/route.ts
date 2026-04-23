@@ -24,7 +24,7 @@ export const POST = wrapAsync(async (req: NextRequest) => {
   }
 
   const date = new Date();
-  const toDate = new Date(date).setHours(0, 0, 0, 0);
+  const toDate = new Date(date).setUTCHours(0, 0, 0, 0);
 
   const fWorker = await WorkerModle.findById(worker);
   if (!fWorker) {
@@ -37,7 +37,6 @@ export const POST = wrapAsync(async (req: NextRequest) => {
     date: toDate,
   });
 
-  console.log(alreadyCurrDay)
 
   if (alreadyCurrDay) {
     alreadyCurrDay.status = body.status;

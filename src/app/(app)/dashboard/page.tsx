@@ -130,6 +130,8 @@ function page() {
           ? (haltDayToday += 1)
           : (absentToday += 1);
     });
+  
+  // console.log(allAttendace)
 
   return (
     <div className="flex-1 bg-[#FFFDF5]">

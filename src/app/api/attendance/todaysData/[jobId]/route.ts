@@ -9,13 +9,17 @@ export const GET = wrapAsync(
 
     const { jobId } = await params;
 
-    const allAttendance = await AttendanceModel.find({ job: jobId });
+    // today's day range
+    const startOfDay = new Date().setUTCHours(0,0,0,0)
+    const endOfDay = new Date().setUTCHours(23,59,59,59)
 
-    const today = allAttendance.filter(
-      (at) =>
-        new Date(at.date).setHours(0, 0, 0, 0) ==
-        new Date().setHours(0, 0, 0, 0),
-    );
+    const today = await AttendanceModel.find({
+      job : jobId,
+      date : {
+        $gte : startOfDay,
+        $lt : endOfDay
+      }
+    })
 
     return NextResponse.json(
       {

@@ -61,6 +61,8 @@ function page() {
       });
   }, [isSubmitting]);
 
+  console.log(allAttendace)
+
   return (
     <div
       id="attendace"
@@ -90,6 +92,7 @@ function page() {
             key={idx}
             className="border-t border-[#9a4f21] flex justify-between p-2"
           >
+            
             <h1 className="w-[45%] sm:w-[40%] sm:font-semibold tracking-tight">
               {at.WorkerDetail.name.toUpperCase()}
             </h1>
@@ -101,7 +104,7 @@ function page() {
                 checked={
                   new Date(
                     at.attendanceRecord[at.attendanceRecord.length - 1].date,
-                  ).getTime() === new Date(new Date()).setHours(0, 0, 0, 0) &&
+                  ).getTime() === new Date(new Date()).setUTCHours(0, 0, 0, 0) &&
                   at.attendanceRecord[at.attendanceRecord.length - 1].status ===
                     1
                 }
@@ -116,7 +119,7 @@ function page() {
                 checked={
                   new Date(
                     at.attendanceRecord[at.attendanceRecord.length - 1].date,
-                  ).getTime() === new Date(new Date()).setHours(0, 0, 0, 0) &&
+                  ).getTime() === new Date(new Date()).setUTCHours(0, 0, 0, 0) &&
                   at.attendanceRecord[at.attendanceRecord.length - 1].status ===
                     0.5
                 }
@@ -131,7 +134,7 @@ function page() {
                 checked={
                   new Date(
                     at.attendanceRecord[at.attendanceRecord.length - 1].date,
-                  ).getTime() === new Date(new Date()).setHours(0, 0, 0, 0) &&
+                  ).getTime() === new Date(new Date()).setUTCHours(0, 0, 0, 0) &&
                   at.attendanceRecord[at.attendanceRecord.length - 1].status ===
                     0
                 }
