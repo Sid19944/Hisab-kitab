@@ -1,6 +1,5 @@
 "use client";
 
-import { Attendance } from "@/models/attendanceSheet";
 import { ApiResponse } from "@/types/ApiResponse";
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
