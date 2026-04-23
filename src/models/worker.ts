@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, model, ObjectId } from "mongoose";
 
 export interface Worker extends Document {
-  teamLeader: ObjectId;
+  teamLeader: ObjectId | string;
   name: string;
   mobileNumber: number;
 }
