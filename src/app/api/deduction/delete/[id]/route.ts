@@ -22,7 +22,7 @@ export const DELETE = wrapAsync(
       throw new ErrorHandler("Prove The Id", 400);
     }
 
-    const deduction = await deductionsModel.findByIdAndDelete(id);r  
+    const deduction = await deductionsModel.findByIdAndDelete(id);
 
     if (!deduction) {
       throw new ErrorHandler("Failed To delete, Try Again", 500);
